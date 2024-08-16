@@ -5,18 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"> <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
+            font-size: 16px;
         }
         .sidebar {
             height: 100vh;
             background-color: #000000;
             padding-top: 20px;
             position: fixed;
-            width: 200px; /* Adjusted width to make room for icons */
+            width: 200px; /* Default width for larger screens */
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
         }
         .sidebar a {
             color: white;
@@ -30,23 +34,57 @@
             background-color: #495057;
         }
         .sidebar i {
-            margin-right: 10px; /* Space between icon and text */
+            margin-right: 10px;
         }
         .content {
             margin-left: 220px;
             padding: 20px;
-        }
-        .card {
-            margin-bottom: 20px;
         }
         .language-switch {
             position: absolute;
             top: 20px;
             right: 20px;
         }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                display: none;
+            }
+            .sidebar.active {
+                display: flex;
+            }
+            .sidebar a {
+                padding: 10px;
+            }
+            .content {
+                margin-left: 0;
+                padding: 10px;
+            }
+            .language-switch {
+                position: static;
+                margin-top: 10px;
+            }
+            body {
+                font-size: 14px; /* Smaller font size for smaller screens */
+            }
+        }
+        .menu-toggle {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+                margin: 10px;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Mobile menu toggle button -->
+    <button class="btn btn-primary menu-toggle" id="menu-toggle">Menu</button>
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -86,7 +124,7 @@
         const langSwitchButton = document.getElementById('switch-lang');
         const sectionTitle = document.getElementById('section-title');
         const sectionContent = document.getElementById('section-content');
-        
+
         const aboutLink = document.getElementById('about-link');
         const eduLink = document.getElementById('edu-link');
         const certLink = document.getElementById('cert-link');
@@ -94,7 +132,6 @@
         const confLink = document.getElementById('conf-link');
         const progLink = document.getElementById('prog-link');
         const pubLink = document.getElementById('pub-link');
-
         const contactLink = document.getElementById('contact-link');
 
         let isPolish = true;
@@ -120,7 +157,7 @@
                 confLink.innerHTML = '<i class="bi bi-person-video3"></i>Conferences';
                 progLink.innerHTML = '<i class="bi bi-bug"></i>Softwares';
                 contactLink.innerHTML = '<i class="bi bi-envelope"></i>Contact';
-                pubLink.innerHTML = '<i class="bi bi-card-text"></i>Publications</a>';
+                pubLink.innerHTML = '<i class="bi bi-card-text"></i>Publications';
                 sectionTitle.textContent = "About Me";
                 loadContent('pages/home_en.html');
                 langSwitchButton.textContent = "Polski";
@@ -132,7 +169,7 @@
                 confLink.innerHTML = '<i class="bi bi-person-video3"></i>Konferencje';
                 progLink.innerHTML = '<i class="bi bi-bug"></i>Programy';
                 contactLink.innerHTML = '<i class="bi bi-envelope"></i>Kontakt';
-                pubLink.innerHTML = '<i class="bi bi-card-text"></i>Publikacje</a>';
+                pubLink.innerHTML = '<i class="bi bi-card-text"></i>Publikacje';
                 sectionTitle.textContent = "O mnie";
                 loadContent('pages/home_pl.html');
                 langSwitchButton.textContent = "English";
@@ -151,12 +188,12 @@
                 } else if (href === '#education') {
                     sectionTitle.textContent = isPolish ? "Edukacja" : "Education";
                     loadContent(isPolish ? 'pages/education_pl.html' : 'pages/education_en.html');
-                }  else if (href === '#programs') {
+                } else if (href === '#programs') {
                     sectionTitle.textContent = isPolish ? "Programy" : "Softwares";
                     loadContent(isPolish ? 'pages/programs_pl.html' : 'pages/programs_en.html');
                 } else if (href === '#publications') {
                     sectionTitle.textContent = isPolish ? "Publikacje" : "Publications";
-                    loadContent(isPolish ? 'pages/publications.html' : 'pages/publications.html');
+                    loadContent(isPolish ? 'pages/publications_pl.html' : 'pages/publications_en.html');
                 } else if (href === '#conferences') {
                     sectionTitle.textContent = isPolish ? "Konferencje" : "Conferences";
                     loadContent(isPolish ? 'pages/conferences_pl.html' : 'pages/conferences_en.html');
@@ -166,15 +203,17 @@
                 } else if (href === '#experience') {
                     sectionTitle.textContent = isPolish ? "Doświadczenie" : "Experience";
                     loadContent(isPolish ? 'pages/experience_pl.html' : 'pages/experience_en.html');
-                } else if (href === '#education') {
-                    sectionTitle.textContent = isPolish ? "Edukacja" : "Education";
-                    loadContent(isPolish ? 'pages/education_pl.html' : 'pages/education_en.html');
                 } else if (href === '#contact') {
                     sectionTitle.textContent = isPolish ? "Kontakt" : "Contact";
                     loadContent(isPolish ? 'pages/contact_pl.html' : 'pages/contact_en.html');
                 }
-                // Add similar conditions for other sections...
             });
+        });
+
+        // Toggle sidebar visibility on mobile
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
         });
     </script>
 </body>
