@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"> <!-- Bootstrap Icons CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            height: 100vh;
+            background-color: #000000;
+            padding-top: 20px;
+            position: fixed;
+            width: 200px; /* Adjusted width to make room for icons */
+        }
+        .sidebar a {
+            color: white;
+            padding: 15px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+        .sidebar i {
+            margin-right: 10px; /* Space between icon and text */
+        }
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#about-me" id="about-link"><i class="bi bi-person"></i>O mnie</a>
+        <a href="#education" id="edu-link"><i class="bi bi-book"></i>Edukacja</a>
+        <a href="#certificates" id="cert-link"><i class="bi bi-award"></i>Certyfikaty</a>
+        <a href="#experience" id="exp-link"><i class="bi bi-briefcase"></i>Doświadczenie</a>
+        <a href="#conferences" id="conf-link"><i class="bi bi-person-video3"></i>Konferencje</a>
+        <a href="#programs" id="prog-link"><i class="bi bi-bug"></i>Programy</a>
+        <a href="#publications" id="pub-link"><i class="bi bi-card-text"></i>Publikacje</a>
+        <a href="#contact" id="contact-link"><i class="bi bi-envelope"></i>Kontakt</a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <div class="language-switch">
+            <button class="btn btn-secondary" id="switch-lang">English</button>
+        </div>
+
+        <h2 id="section-title">O mnie</h2>
+
+        <!-- Placeholder Content -->
+        <div class="card">
+            <div class="card-body" id="section-content">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Language Switcher Script -->
+    <script>
+        const langSwitchButton = document.getElementById('switch-lang');
+        const sectionTitle = document.getElementById('section-title');
+        const sectionContent = document.getElementById('section-content');
+        
+        const aboutLink = document.getElementById('about-link');
+        const eduLink = document.getElementById('edu-link');
+        const certLink = document.getElementById('cert-link');
+        const expLink = document.getElementById('exp-link');
+        const confLink = document.getElementById('conf-link');
+        const progLink = document.getElementById('prog-link');
+        const pubLink = document.getElementById('pub-link');
+
+        const contactLink = document.getElementById('contact-link');
+
+        let isPolish = true;
+
+        async function loadContent(file) {
+            const response = await fetch(file);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.text();
+            sectionContent.innerHTML = data;
+        }
+
+        // Initial load for "O mnie" section in Polish
+        loadContent('pages/home_pl.html');
+
+        langSwitchButton.addEventListener('click', () => {
+            if (isPolish) {
+                aboutLink.innerHTML = '<i class="bi bi-person"></i>About Me';
+                eduLink.innerHTML = '<i class="bi bi-book"></i>Education';
+                certLink.innerHTML = '<i class="bi bi-award"></i>Certificates';
+                expLink.innerHTML = '<i class="bi bi-briefcase"></i>Experience';
+                confLink.innerHTML = '<i class="bi bi-person-video3"></i>Conferences';
+                progLink.innerHTML = '<i class="bi bi-bug"></i>Softwares';
+                contactLink.innerHTML = '<i class="bi bi-envelope"></i>Contact';
+                pubLink.innerHTML = '<i class="bi bi-card-text"></i>Publications</a>';
+                sectionTitle.textContent = "About Me";
+                loadContent('pages/home_en.html');
+                langSwitchButton.textContent = "Polski";
+            } else {
+                aboutLink.innerHTML = '<i class="bi bi-person"></i>O mnie';
+                eduLink.innerHTML = '<i class="bi bi-book"></i>Edukacja';
+                certLink.innerHTML = '<i class="bi bi-award"></i>Certyfikaty';
+                expLink.innerHTML = '<i class="bi bi-briefcase"></i>Doświadczenie';
+                confLink.innerHTML = '<i class="bi bi-person-video3"></i>Konferencje';
+                progLink.innerHTML = '<i class="bi bi-bug"></i>Programy';
+                contactLink.innerHTML = '<i class="bi bi-envelope"></i>Kontakt';
+                pubLink.innerHTML = '<i class="bi bi-card-text"></i>Publikacje</a>';
+                sectionTitle.textContent = "O mnie";
+                loadContent('pages/home_pl.html');
+                langSwitchButton.textContent = "English";
+            }
+            isPolish = !isPolish;
+        });
+
+        // Handle sidebar links
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const href = link.getAttribute('href');
+                if (href === '#about-me') {
+                    sectionTitle.textContent = isPolish ? "O mnie" : "About Me";
+                    loadContent(isPolish ? 'pages/home_pl.html' : 'pages/home_en.html');
+                } else if (href === '#education') {
+                    sectionTitle.textContent = isPolish ? "Edukacja" : "Education";
+                    loadContent(isPolish ? 'pages/education_pl.html' : 'pages/education_en.html');
+                }  else if (href === '#programs') {
+                    sectionTitle.textContent = isPolish ? "Programy" : "Softwares";
+                    loadContent(isPolish ? 'pages/programs_pl.html' : 'pages/programs_en.html');
+                } else if (href === '#publications') {
+                    sectionTitle.textContent = isPolish ? "Publikacje" : "Publications";
+                    loadContent(isPolish ? 'pages/publications.html' : 'pages/publications.html');
+                } else if (href === '#conferences') {
+                    sectionTitle.textContent = isPolish ? "Konferencje" : "Conferences";
+                    loadContent(isPolish ? 'pages/conferences_pl.html' : 'pages/conferences_en.html');
+                } else if (href === '#certificates') {
+                    sectionTitle.textContent = isPolish ? "Certyfikaty" : "Certificates";
+                    loadContent(isPolish ? 'pages/certificates_pl.html' : 'pages/certificates_en.html');
+                } else if (href === '#experience') {
+                    sectionTitle.textContent = isPolish ? "Doświadczenie" : "Experience";
+                    loadContent(isPolish ? 'pages/experience_pl.html' : 'pages/experience_en.html');
+                } else if (href === '#education') {
+                    sectionTitle.textContent = isPolish ? "Edukacja" : "Education";
+                    loadContent(isPolish ? 'pages/education_pl.html' : 'pages/education_en.html');
+                } else if (href === '#contact') {
+                    sectionTitle.textContent = isPolish ? "Kontakt" : "Contact";
+                    loadContent(isPolish ? 'pages/contact_pl.html' : 'pages/contact_en.html');
+                }
+                // Add similar conditions for other sections...
+            });
+        });
+    </script>
+</body>
+</html>
